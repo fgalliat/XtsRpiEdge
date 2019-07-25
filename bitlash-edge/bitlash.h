@@ -36,8 +36,8 @@
 #ifndef _BITLASH_H
 #define _BITLASH_H
 
-#ifdef ARDUINO
-  // Cf Oups !
+#ifdef __MK20DX256__
+  // Cf Oups ! Teensy 3.2
   #define ARM_BUILD 2
   #define E2END 2048
 #endif
