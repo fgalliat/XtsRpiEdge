@@ -3,6 +3,12 @@ Teensy 3.2 + DFPlayer + ? bitlash ?
 Serial not declared => '.c' -> '.cpp' (Cf .c doesn't support objects)
 
 
+On RPI
+ -> raspi-config : enable uart but disable loggin onto
+ -> edit /boot/config.txt : ensure enable_uart=1
+ -> reboot
+ -> minicom -D /dev/serial0
+
 each cmd/instr always return a value (@ least 0 or 1)
  - even if not print( f ) ?? -
  - d1 = 1 => 1 -> ON the pin
