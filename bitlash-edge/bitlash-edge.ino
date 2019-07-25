@@ -39,6 +39,12 @@ numvar timer1(void) {
 	return virtTimer++;
 }
 
+bool local_echo = true;
+numvar setEcho(void) { 
+	local_echo = arg[-1] != 0;
+	return local_echo ? 1 : 0;
+}
+
 void setup(void) {
 	initBitlash(115200);		// must be first to initialize serial port
 
@@ -48,6 +54,8 @@ void setup(void) {
 	//		(bitlash_function) timer1 tells Bitlash where our handler lives
 	//
 	addBitlashFunction("timer1", (bitlash_function) timer1);
+
+	addBitlashFunction("echo", (bitlash_function) setEcho);
 }
 
 void loop(void) {

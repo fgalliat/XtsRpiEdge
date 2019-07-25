@@ -95,6 +95,8 @@ char buf[IDLEN+1];
 #endif
 }
 
+extern bool local_echo;
+
 void initlbuf(void) {
 	lbufptr = lbuf;
 
@@ -103,7 +105,7 @@ void initlbuf(void) {
 	if (serialIsOverridden()) return;
 #endif
 
-	prompt();
+	if (local_echo) prompt();
 	
 	// flush any pending serial input
 	while (serialAvailable()) serialRead();
@@ -114,7 +116,7 @@ void initlbuf(void) {
 byte putlbuf(char c) {
 	if (lbufptr < lbuf + LBUFLEN - 2) {
 		*lbufptr++ = c;
-		spb(c);
+		if (local_echo) spb(c);
 		return 1;
 	}
 	else {
