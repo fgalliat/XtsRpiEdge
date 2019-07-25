@@ -40,6 +40,9 @@
   // Cf Oups ! Teensy 3.2
   #define ARM_BUILD 2
   #define E2END 2048
+  #define CORE_EDGE 1
+
+  #include "Arduino.h"
 #endif
 
 #if defined(__x86_64__) || defined(__i386__)
@@ -123,14 +126,47 @@
 
 // the serial support, she is changing all the time
 #if ARDUINO_VERSION >= 15
-#define beginSerial Serial.begin
-#define serialAvailable Serial.available
-#define serialRead Serial.read
 
-#if defined(ARDUINO) && ARDUINO >= 100
-	#define serialWrite Serial.write
+#ifdef CORE_EDGE
+
+    static void beginSerial(int bauds) {
+		Serial.begin(bauds);
+		Serial1.begin(bauds);
+	}
+
+	static int serialAvailable() {
+		int i = Serial.available();
+		if ( i == 0 ) {
+			i = Serial1.available();
+		}
+		return i;
+	}
+
+	static int serialRead() {
+		int i = Serial.read();
+		if ( i < 0 ) {
+			i = Serial1.read();
+		}
+		return i;
+	}
+
+	static void serialWrite(char ch) {
+		Serial.write(ch);
+		Serial1.write(ch);
+	}
+
 #else
-	#define serialWrite Serial.print
+
+	#define beginSerial Serial.begin
+	#define serialAvailable Serial.available
+	#define serialRead Serial.read
+
+	#if defined(ARDUINO) && ARDUINO >= 100
+		#define serialWrite Serial.write
+	#else
+		#define serialWrite Serial.print
+	#endif
+
 #endif
 
 #endif
