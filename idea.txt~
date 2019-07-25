@@ -9,15 +9,6 @@ On RPI
  -> reboot
  -> minicom -D /dev/serial0
 
-
-On MCU bitlash
-
- - add echo( 0/1 ) user function
-   - to enable/disable local echo on Serial & Serial1
-   - if disable : only print( ... can send content to port
-
-
-
 each cmd/instr always return a value (@ least 0 or 1)
  - even if not print( f ) ?? -
  - d1 = 1 => 1 -> ON the pin
