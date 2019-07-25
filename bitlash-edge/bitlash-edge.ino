@@ -25,21 +25,22 @@
 	OTHER DEALINGS IN THE SOFTWARE.
 
 ***/
-#if defined(ARDUINO) && ARDUINO >= 100
-  #include "Arduino.h"
-#else
-  #include "WProgram.h"
-#endif
+
+#include "Arduino.h"
+
 #include "bitlash.h"
+
+int virtTimer = 0;
 
 // Declare a user function named "timer1" returning a numeric Bitlash value
 //
 numvar timer1(void) { 
-	return TCNT1; 	// return the value of Timer 1
+	// return TCNT1; 	// return the value of Timer 1
+	return virtTimer++;
 }
 
 void setup(void) {
-	initBitlash(57600);		// must be first to initialize serial port
+	initBitlash(115200);		// must be first to initialize serial port
 
 	// Register the extension function with Bitlash
 	//		"timer1" is the Bitlash name for the function

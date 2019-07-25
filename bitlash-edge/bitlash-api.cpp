@@ -35,6 +35,8 @@
 ***/
 #include "bitlash.h"
 
+#include "xts_forward_symbols.h"
+
 
 extern void displayBanner(void);
 extern void initlbuf(void);

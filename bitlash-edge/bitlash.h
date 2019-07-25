@@ -36,6 +36,12 @@
 #ifndef _BITLASH_H
 #define _BITLASH_H
 
+#ifdef ARDUINO
+  // Cf Oups !
+  #define ARM_BUILD 2
+  #define E2END 2048
+#endif
+
 #if defined(__x86_64__) || defined(__i386__)
 #define UNIX_BUILD 1
 #elif defined(__SAM3X8E__)
@@ -43,6 +49,11 @@
 #elif (defined(__MK20DX128__) || defined(__MK20DX256__)) && defined (CORE_TEENSY)
   // Teensy 3
   #define ARM_BUILD 2
+  #warning "Teensy 3.2"
+
+  // Cf Oups !
+  #define E2END 2048
+
 #elif defined(PART_LM4F120H5QR) //support Energia.nu - Stellaris Launchpad / Tiva C Series 
 #define ARM_BUILD  4 //support Energia.nu - Stellaris Launchpad / Tiva C Series  
 #else
@@ -415,6 +426,9 @@ unsigned long millis(void);
 //
 //	ARM BUILD
 #if defined(ARM_BUILD)
+
+#warning "ARM-BUILD"
+
  #define prog_char char
 #define prog_uchar byte
 #define PROGMEM
@@ -423,9 +437,12 @@ unsigned long millis(void);
 #define strncpy_P strncpy
 #define strcmp_P strcmp
 #define strlen_P strlen
+
 #if ARM_BUILD==1
+#warning "ARM-BUILD-1"
   #define E2END 4096
 #else
+#warning "ARM-BUILD-2"
   // Teensy 3
   #define E2END 2048
 #endif
@@ -748,9 +765,11 @@ extern numvar symval;		// value of current numeric expression
 
 #define USE_GPIORS defined(AVR_BUILD)
 
-#ifndef GPIOR0 || GPIOR1
+// #ifndef GPIOR0 || GPIOR1
+#ifndef GPIOR0
 	#undef USE_GPIORS
 #endif
+
 #if (defined USE_GPIORS)
 #define sym GPIOR0
 #define inchar GPIOR1

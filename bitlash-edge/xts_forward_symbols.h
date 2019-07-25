@@ -18,4 +18,6 @@
 
   void initlbuf(void);
 
+  void eeinit(void);
+
 #endif
