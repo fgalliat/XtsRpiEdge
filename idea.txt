@@ -18,14 +18,21 @@ On MCU bitlash
    - see : bitlash-cmdline.cpp :: byte putlbuf(char c) {
      - **done**
 
+ - add DFPlayer support (RX2/TX2)
+
+ - add another / aux. Serial port (RX3/TX3)
+
+ - add MS chatPad ? // could be linked to auxSerial then activated or not
+   - if need another (SoftSerial) port -> see SubMCU code + pinout
 
 
-each cmd/instr always return a value (@ least 0 or 1)
- - even if not print( f ) ?? -
- - d1 = 1 => 1 -> ON the pin
- - d1     => 1
- - readK  => Hello
- 
+
+ - WANTED : 
+   - analog/pwn
+   - in/out/setDir
+   - write/read to/from Serial(s)
+   - read from keypad
+
  - https://github.com/billroy/bitlash
  - could have a look to https://github.com/geekfactory/Shell
  - is just a cmd/arg parser but very light
@@ -34,13 +41,6 @@ each cmd/instr always return a value (@ least 0 or 1)
  (but can't even take String as arg)
  - else can see for a tiny BASIC
 
- - WANTED : 
-   - if / for
-   - cmd return an expression
-   - analog/pwn
-   - in/out/setDir
-   - write/read to/from Serial(s)
-   - read from keypad
 
 
 use T3.2 as programmable GPIO + function/macro runner
