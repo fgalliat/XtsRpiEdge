@@ -1,3 +1,9 @@
+ADDED cpp + fb code for demo
+maybe could retry nes emulation w/ GPIO gamepad (old arietta code)
+ -> will need ext. Screen 
+ -> will have no sound
+ -> but !GHz will be faster than arietta....
+
 Teensy 3.2 + DFPlayer + ? bitlash ?
 
 Serial not declared => '.c' -> '.cpp' (Cf .c doesn't support objects)
