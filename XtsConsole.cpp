@@ -153,6 +153,7 @@ bool XtsConsole::init() {
         clear();
         noecho();
         cbreak();	/* Line buffering disabled. pass on everything */
+        timeout(-1); // non blocking getch ...
     #endif
     return ok;
 }
