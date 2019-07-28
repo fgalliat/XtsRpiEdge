@@ -9,6 +9,8 @@
 #include <stdint.h>
 #include <unistd.h>
 
+#include <stdio.h>
+
 #include "./XtsConsole.h"
 
 Pad _pad;
@@ -69,8 +71,46 @@ const uint16_t CLR_WHITE = rgb(255,255,255);
       if ( _k_KEYS == SDLK_f ) { _pad._bt2 = true; }
   }
 #elif MODE_IN_NCURSES
+  #include <ncurses.h>
+
+    int lastK = 0;
+
   void pollPad() {
-     // ncurses way
+     // ncurses way -- beware : blocking method
+
+      _pad._left = false; _pad._right = false;
+      _pad._up = false; _pad._down = false;
+      _pad._bt1 = false; _pad._bt2 = false;
+      _pad._start = false;
+
+     int ch = getch(); // beware : blocking
+
+      _pad._atLeastOne = ch > 0;
+      _pad._hasChanged = lastK != ch;
+      lastK = ch;
+
+
+     if ( ch == KEY_LEFT ) {
+         _pad._left = true;
+     }
+     if ( ch == KEY_RIGHT ) {
+         _pad._right = true;
+     }
+     if ( ch == KEY_UP ) {
+         _pad._up = true;
+     }
+     if ( ch == KEY_DOWN ) {
+         _pad._down = true;
+     }
+     if ( ch == (int)'s' ) {
+         _pad._start = true;
+     }
+     if ( ch == (int)'d' ) {
+         _pad._bt1 = true;
+     }
+     if ( ch == (int)'f' ) {
+         _pad._bt2 = true;
+     }
   }
 #else
   void pollPad() {
@@ -98,12 +138,22 @@ XtsConsole::XtsConsole() {
 }
 
 XtsConsole::~XtsConsole() {
-
+  #if MODE_IN_NCURSES
+    clrtoeol();
+	refresh();
+	endwin();
+  #endif
 }
 
 bool XtsConsole::init() {
     bool ok = this->screen->init(0); // fb0
     // init GPIO / ncurses reading (TODO)
+    #if MODE_IN_NCURSES
+        initscr();
+        clear();
+        noecho();
+        cbreak();	/* Line buffering disabled. pass on everything */
+    #endif
     return ok;
 }
 
