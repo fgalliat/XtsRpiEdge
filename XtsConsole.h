@@ -20,6 +20,15 @@
         bool bt1();
         bool bt2();
         bool start();
+
+        bool _up = false;
+        bool _down = false;
+        bool _left = false;
+        bool _right = false;
+
+        bool _bt1 = false;
+        bool _bt2 = false;
+        bool _start = false;
   };
 
   class XtsConsole {

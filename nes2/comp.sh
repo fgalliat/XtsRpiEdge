@@ -6,10 +6,10 @@ MODE="XTSCONSOLE"
 if [ "$1" = "arm" ]     
 then                    
  # Arietta version      
- . ../arietta.arch      
+ . ../cpp/arch/rpi/rpi.arch      
 else                    
  # Desktop version      
- . ../desktop.arch      
+ . ../cpp/arch/desktop/desktop.arch      
 fi                      
 
 DEPS="$CPPs"
