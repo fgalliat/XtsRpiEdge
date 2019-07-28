@@ -153,7 +153,8 @@ bool XtsConsole::init() {
         clear();
         noecho();
         cbreak();	/* Line buffering disabled. pass on everything */
-        timeout(-1); // non blocking getch ...
+        timeout(1); // non blocking getch ...
+        keypad(stdscr, true); // to allow arrows key decoding
     #endif
     return ok;
 }
