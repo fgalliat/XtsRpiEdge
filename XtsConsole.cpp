@@ -37,7 +37,7 @@ const uint16_t CLR_WHITE = rgb(255,255,255);
   #include <SDL2/SDL.h>
   extern int _k_KEYS;
 
-
+  int lastK = 0;
   void pollPad() {
       // TODO : better impl
       _pad._left = false; _pad._right = false;
@@ -46,7 +46,8 @@ const uint16_t CLR_WHITE = rgb(255,255,255);
       _pad._start = false;
 
       _pad._atLeastOne = _k_KEYS != 0;
-      _pad._hasChanged = true; // TODO better
+      _pad._hasChanged = lastK != _k_KEYS;
+      lastK = _k_KEYS;
 
       if ( _k_KEYS == SDLK_LEFT ) { _pad._left = true; }
       if ( _k_KEYS == SDLK_RIGHT ) { _pad._right = true; }
