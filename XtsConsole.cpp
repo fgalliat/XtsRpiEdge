@@ -6,10 +6,11 @@
  */
 
 #include <time.h>
+#include <stdint.h>
 
 #include "./XtsConsole.h"
 
-Pad pad;
+Pad _pad;
 WiredScreen fbScreen;
 
 
@@ -23,6 +24,15 @@ WiredScreen fbScreen;
 
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+uint16_t rgb(uint8_t r,uint8_t g,uint8_t b) {return (uint16_t)( (( r *31/255 )<<11) | (( g *63/255 )<<5) | ( b *31/255 ) );}
+
+#include "./cpp/arch/desktop/screen/WiredScreen.h"
+const uint16_t CLR_GREEN = rgb(0,255,0);
+const uint16_t CLR_BLACK = rgb(0,0,0);
+const uint16_t CLR_WHITE = rgb(255,255,255);
+
+// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 #if MODE_IN_SDL
   #include <SDL2/SDL.h>
   extern int _k_KEYS;
@@ -30,21 +40,25 @@ WiredScreen fbScreen;
 
   void pollPad() {
       // TODO : better impl
-      pad._left = false; pad._right = false;
-      pad._up = false; pad._down = false;
-      pad._bt1 = false; pad._bt2 = false;
-      pad._start = false;
+      _pad._left = false; _pad._right = false;
+      _pad._up = false; _pad._down = false;
+      _pad._bt1 = false; _pad._bt2 = false;
+      _pad._start = false;
 
-      if ( _k_KEYS == SDLK_LEFT ) { pad._left = true; }
-      if ( _k_KEYS == SDLK_RIGHT ) { pad._right = true; }
-      if ( _k_KEYS == SDLK_UP ) { pad._up = true; }
-      if ( _k_KEYS == SDLK_DOWN ) { pad._down = true; }
+      _pad._atLeastOne = _k_KEYS != 0;
+      _pad._hasChanged = true; // TODO better
 
-      if ( _k_KEYS == SDLK_s ) { pad._start = true; }
-      if ( _k_KEYS == SDLK_d ) { pad._bt1 = true; }
-      if ( _k_KEYS == SDLK_f ) { pad._bt2 = true; }
+      if ( _k_KEYS == SDLK_LEFT ) { _pad._left = true; }
+      if ( _k_KEYS == SDLK_RIGHT ) { _pad._right = true; }
+      if ( _k_KEYS == SDLK_UP ) { _pad._up = true; }
+      if ( _k_KEYS == SDLK_DOWN ) { _pad._down = true; }
+
+      if ( _k_KEYS == SDLK_s ) { _pad._start = true; }
+      if ( _k_KEYS == SDLK_d ) { _pad._bt1 = true; }
+      if ( _k_KEYS == SDLK_f ) { _pad._bt2 = true; }
   }
 #elif MODE_IN_NCURSES
+
   void pollPad() {
      // ncurses way
   }
@@ -54,6 +68,8 @@ WiredScreen fbScreen;
   }
 #endif
 
+bool Pad::atLeastOne() { return this->_atLeastOne; }
+bool Pad::hasChanged() { return this->_hasChanged; }
 
 bool Pad::bt1() { return this->_bt1; }
 bool Pad::bt2() { return this->_bt2; }
@@ -67,8 +83,12 @@ bool Pad::down() { return this->_down; }
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 XtsConsole::XtsConsole() {
-    this->pad = &pad;
+    this->currentPad = &_pad;
     this->screen = &fbScreen;
+}
+
+XtsConsole::~XtsConsole() {
+
 }
 
 bool XtsConsole::init() {

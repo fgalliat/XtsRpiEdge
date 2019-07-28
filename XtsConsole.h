@@ -8,6 +8,8 @@
  * 
  */
 
+  #include <string.h>
+
   #include "./cpp/arch/desktop/screen/WiredScreen.h"
 
   class Pad {
@@ -20,6 +22,12 @@
         bool bt1();
         bool bt2();
         bool start();
+
+        bool atLeastOne();
+        bool hasChanged();
+
+        bool _atLeastOne = false;
+        bool _hasChanged = false;
 
         bool _up = false;
         bool _down = false;
