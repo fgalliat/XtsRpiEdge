@@ -7,20 +7,30 @@
 
 #include <time.h>
 #include <stdint.h>
+#include <unistd.h>
 
 #include "./XtsConsole.h"
 
 Pad _pad;
 WiredScreen fbScreen;
 
+#ifndef MY_PC
+ // RpiMode
+ #define MODE_OUT_SDL 0
+ #define MODE_OUT_FB 1
 
-// defined by build script LATER
-#define MODE_OUT_SDL 1
-#define MODE_OUT_FB 0
+ #define MODE_IN_SDL 0
+ #define MODE_IN_NCURSES 1
+ #define MODE_IN_GPIO 0
+#else
+ // Desktop
+ #define MODE_OUT_SDL 1
+ #define MODE_OUT_FB 0
 
-#define MODE_IN_SDL 1
-#define MODE_IN_NCURSES 0
-#define MODE_IN_GPIO 0
+ #define MODE_IN_SDL 1
+ #define MODE_IN_NCURSES 0
+ #define MODE_IN_GPIO 0
+#endif
 
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -59,7 +69,6 @@ const uint16_t CLR_WHITE = rgb(255,255,255);
       if ( _k_KEYS == SDLK_f ) { _pad._bt2 = true; }
   }
 #elif MODE_IN_NCURSES
-
   void pollPad() {
      // ncurses way
   }
@@ -102,7 +111,7 @@ void XtsConsole::delay(long time) {
     #if MODE_OUT_SDL
       SDL_Delay(time);
     #else
-      ::delay(time);
+      usleep(time*1000);
     #endif
 }
 
