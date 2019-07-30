@@ -64,8 +64,14 @@ void set_size(int mul)
 
 
 #ifdef XTSCONSOLE 
+
+#define DIRECT_BLITT 1
+
 u16 pixels_copy[256*240]; 
 void *videoThread(void *argument) {
+  #if DIRECT_BLITT
+    // ...
+  #else
   static const int w = 256;
   static const int h = 240;
   static const int x = ( 320-w ) / 2;
@@ -74,8 +80,10 @@ void *videoThread(void *argument) {
   	if ( !pause ) {
 		console.getScreen()->drawRGB16(x,y,w,h,pixels_copy);
   	}
-	console.delay(50);
+	//console.delay(50);
+	console.delay(5);
   }
+  #endif
   return NULL;
 }
 #endif
@@ -290,13 +298,17 @@ void new_frame(u32* pixels)
 int frameCpt =  0;
 void new_frame(u16* pixels)
 {
+	
+	#if DIRECT_BLITT
 	// if ( frameCpt++ % 10 > 0 ) { return; }
- //   static const int w = 256;
- //   static const int h = 240;
- //   static const int x = ( 320-w ) / 2;
- //   static const int y = ( 240-h ) / 2;
- //   console.getScreen()->drawRGB16(x,y,w,h,pixels);
- memcpy(pixels_copy, pixels, 256*240*2);
+    static const int w = 256;
+    static const int h = 240;
+    static const int x = ( 320-w ) / 2;
+    static const int y = ( 240-h ) / 2;
+    console.getScreen()->drawRGB16(x,y,w,h,pixels);
+    #else 
+		memcpy(pixels_copy, pixels, 256*240*2);
+    #endif
 }
 #endif
 
@@ -416,7 +428,7 @@ void run()
 //    printf("poll console \n"); // it always do...
 // console.delay(30); // TMP slow down keypad
 
-if (pause) { // TMP : remove keypad listening while play...
+if (true || pause) { // TMP : remove keypad listening while play...
 
   pad = console.readPad();
 //   printf("polled console \n");

@@ -146,7 +146,9 @@ XtsConsole::~XtsConsole() {
 }
 
 bool XtsConsole::init() {
-    bool ok = this->screen->init(0); // fb0
+	int fbDev = 0;
+	fbDev = 1;
+    bool ok = this->screen->init(fbDev); // fb0
     // init GPIO / ncurses reading (TODO)
     #if MODE_IN_NCURSES
         initscr();
